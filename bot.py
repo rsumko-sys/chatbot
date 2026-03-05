@@ -10,7 +10,7 @@ from aiogram.utils.keyboard import InlineKeyboardBuilder
 
 from config import load_config
 from storage import Storage, SLOTS
-from content_seed import TASKS, CRITICAL_KEYWORDS, META
+from content_seed import TASKS, CRITICAL_KEYWORDS
 from generator import build_message
 from scheduler import make_scheduler, schedule_daily, schedule_once
 from weather import get_weather

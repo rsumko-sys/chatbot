@@ -1,11 +1,11 @@
 import random
-from datetime import datetime
 from typing import List, Dict, Tuple
 
 from content_seed import META, GREET, WATER, MEDS, WISDOM, ANIMAL, STORIES, RARE
 
 _RARE_CONTENT_PROBABILITY = 0.15
 _REMINDER_PROBABILITY = 0.5
+
 
 def _pick(pool: List[str], recent: set, tries: int = 10) -> str:
     for _ in range(tries):
@@ -14,13 +14,24 @@ def _pick(pool: List[str], recent: set, tries: int = 10) -> str:
             return item
     return random.choice(pool)
 
+
 def _fmt(text: str) -> str:
     return text.strip()
 
-def _animal_vars() -> Dict[str, str]:
-    return {"dog": random.choice(META["animals"]["dogs"]), "cat": random.choice(META["animals"]["cats"])}
 
-def build_message(slot: str, tasks_lines: List[str], quiet: bool, recent: set) -> Tuple[str, List[str]]:
+def _animal_vars() -> Dict[str, str]:
+    return {
+        "dog": random.choice(META["animals"]["dogs"]),
+        "cat": random.choice(META["animals"]["cats"]),
+    }
+
+
+def build_message(
+    slot: str,
+    tasks_lines: List[str],
+    quiet: bool,
+    recent: set,
+) -> Tuple[str, List[str]]:
     used: List[str] = []
 
     greeting = _pick(GREET[slot], recent)

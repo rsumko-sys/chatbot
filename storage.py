@@ -1,11 +1,13 @@
 import sqlite3
 from datetime import datetime, date
-from typing import Optional, List, Tuple, Dict
+from typing import List, Dict
 
 SLOTS = ("morning", "day", "evening")
 
+
 def _utc_now_iso() -> str:
     return datetime.utcnow().isoformat()
+
 
 class Storage:
     def __init__(self, db_path: str):
@@ -129,4 +131,3 @@ class Storage:
             "(SELECT id FROM recent_content ORDER BY id DESC LIMIT 50)"
         )
         self._con.commit()
-
