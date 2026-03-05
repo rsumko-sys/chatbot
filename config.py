@@ -15,6 +15,7 @@ class Config:
     snooze_minutes_default: int
     critical_chase_minutes: int
     db_path: str
+    weather_api_key: str
 
 def load_config() -> Config:
     return Config(
@@ -27,4 +28,5 @@ def load_config() -> Config:
         snooze_minutes_default=int(os.getenv("SNOOZE_MINUTES_DEFAULT", "30")),
         critical_chase_minutes=int(os.getenv("CRITICAL_CHASE_MINUTES", "60")),
         db_path=os.getenv("DB_PATH", "bot.db"),
+        weather_api_key=os.getenv("OPENWEATHER_API_KEY", "").strip(),
     )

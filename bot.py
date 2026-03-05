@@ -27,7 +27,7 @@ db = Storage(CFG.db_path)
 async def main():
     # ...existing code...
     # Приклад використання погодного API
-    print(get_weather())
+    print(get_weather(api_key=CFG.weather_api_key))
     pass
 
 if __name__ == "__main__":
