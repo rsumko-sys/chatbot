@@ -42,3 +42,13 @@ yarn-error.log*
 /playwright-report/
 /blob-report/
 /playwright/*
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.venv/
+*.egg-info/
+dist/
+bot.db

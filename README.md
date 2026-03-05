@@ -1,24 +1,88 @@
-<<<<<<< HEAD
 # Verkhovyna Helper Bot
 
 Триразові нагадування + кнопки "зроблено/нагадай/не встигла" + критичні задачі (павліни/двері/вода/ліки) з повтором.
 
-## Запуск
-1) python -m venv .venv && source .venv/bin/activate
-2) pip install -r requirements.txt
-3) cp .env.example .env і заповни TOKEN та CHAT_ID
-4) python bot.py
+## Запуск локально (Python Telegram Bot)
 
-## Команди
-/ping — живий
-/morning /day /evening — ручний виклик повідомлення
-/quiet — тихий режим (коротко, без історій)
-/normal — звичайний режим
-/stats — статистика за 7 днів
-/tasks — показати таски
-/addtask <slot> <text> — додати таск
-/deltask <slot> <index> — видалити таск
-=======
+```bash
+python -m venv .venv && source .venv/bin/activate
+pip install -r requirements.txt
+cp .env.example .env   # then fill in TELEGRAM_BOT_TOKEN and TARGET_CHAT_ID
+python bot.py
+```
+
+## Команди бота
+
+| Команда | Опис |
+|---------|------|
+| `/ping` | перевірити, що бот живий |
+| `/morning` `/day` `/evening` | ручний виклик повідомлення для слоту |
+| `/quiet` | тихий режим (коротко, без історій) |
+| `/normal` | звичайний режим |
+| `/stats` | статистика виконання за 7 днів |
+| `/tasks` | показати всі поточні таски |
+| `/addtask <slot> <text>` | додати таск до слоту (`morning`/`day`/`evening`) |
+| `/deltask <slot> <index>` | видалити таск за індексом |
+
+## Деплой через GitHub Actions (автоматичний)
+
+При кожному push до гілки `main` CI/CD pipeline автоматично:
+1. Перевіряє код (flake8 + py_compile)
+2. Збирає Docker-образ і публікує його в GitHub Container Registry (GHCR)
+3. Підключається до сервера по SSH і перезапускає контейнер
+
+### Необхідні GitHub Secrets
+
+Відкрийте **Settings → Secrets and variables → Actions → New repository secret**  
+([пряме посилання](https://github.com/rsumko-sys/chatbot/settings/secrets/actions)) і додайте:
+
+| Secret | Опис |
+|--------|------|
+| `TELEGRAM_BOT_TOKEN` | Токен бота — отримайте у [@BotFather](https://t.me/BotFather) |
+| `TARGET_CHAT_ID` | ID чату/користувача для розсилки — отримайте через [@userinfobot](https://t.me/userinfobot) |
+| `TZ_NAME` | Часовий пояс, наприклад `Europe/Kyiv` |
+| `OPENWEATHER_API_KEY` | Ключ [OpenWeatherMap](https://openweathermap.org/api) (опціонально) |
+| `GH_PAT` | GitHub Personal Access Token з правами `read:packages` — для завантаження образу на сервері |
+| `SSH_HOST` | IP-адреса або hostname вашого сервера |
+| `SSH_USER` | Ім'я SSH-користувача на сервері |
+| `SSH_KEY` | Вміст приватного SSH-ключа (`~/.ssh/id_ed25519` або `id_rsa`) |
+
+> **Важливо:** Ніколи не додавайте реальні токени, паролі чи ключі безпосередньо у файли репозиторію.  
+> Git зберігає всю історію — видалення файлу не видаляє секрет. Використовуйте виключно GitHub Secrets.
+
+### Як отримати GitHub PAT
+
+1. Відкрийте [github.com/settings/tokens](https://github.com/settings/tokens) → **Generate new token (classic)**
+2. Виберіть scope: `read:packages`
+3. Скопіюйте токен і збережіть як секрет `GH_PAT`
+
+### Перша настройка SSH-ключа на сервері
+
+```bash
+# На вашому локальному комп'ютері
+ssh-keygen -t ed25519 -C "chatbot-deploy"
+# Скопіюйте публічний ключ на сервер
+ssh-copy-id -i ~/.ssh/id_ed25519 gonzo@YOUR_SERVER_IP
+# Додайте вміст ~/.ssh/id_ed25519 (приватний ключ) як GitHub Secret SSH_KEY
+```
+
+### Запуск контейнера вручну (без CI)
+
+```bash
+docker pull ghcr.io/rsumko-sys/chatbot-bot:latest
+docker run -d \
+  --name chatbot-bot \
+  --restart unless-stopped \
+  -e TELEGRAM_BOT_TOKEN="..." \
+  -e TARGET_CHAT_ID="..." \
+  -e TZ_NAME="Europe/Kyiv" \
+  -e OPENWEATHER_API_KEY="..." \
+  -v chatbot-bot-data:/data \
+  ghcr.io/rsumko-sys/chatbot-bot:latest
+```
+
+---
+
 <a href="https://chat.vercel.ai/">
   <img alt="Chatbot" src="app/(chat)/opengraph-image.png">
   <h1 align="center">Chatbot</h1>
@@ -90,4 +154,3 @@ pnpm dev
 ```
 
 Your app template should now be running on [localhost:3000](http://localhost:3000).
->>>>>>> 0a2b668cda130b309b2e2057e7f0c79145e067fc
