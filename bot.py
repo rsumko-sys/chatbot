@@ -1,18 +1,9 @@
 import asyncio
 import logging
-from datetime import datetime, timedelta, date
 from zoneinfo import ZoneInfo
 
-from aiogram import Bot, Dispatcher, types
-from aiogram.filters import Command
-from aiogram.enums.parse_mode import ParseMode
-from aiogram.utils.keyboard import InlineKeyboardBuilder
-
 from config import load_config
-from storage import Storage, SLOTS
-from content_seed import TASKS, CRITICAL_KEYWORDS, META
-from generator import build_message
-from scheduler import make_scheduler, schedule_daily, schedule_once
+from storage import Storage
 from weather import get_weather
 
 logging.basicConfig(level=logging.INFO)

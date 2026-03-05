@@ -1,8 +1,7 @@
 import random
-from datetime import datetime
 from typing import List, Dict, Tuple
 
-from content_seed import META, GREET, WATER, MEDS, WISDOM, ANIMAL, STORIES, RARE
+from content_seed import META, GREET
 
 def _pick(pool: List[str], recent: set, tries: int = 10) -> str:
     # ...existing code...

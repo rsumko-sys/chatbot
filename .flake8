@@ -1,0 +1,9 @@
+[flake8]
+exclude =
+    .venv,
+    __pycache__,
+    .git,
+    node_modules,
+    build,
+    dist
+extend-ignore = E302,E303,E305,E501
