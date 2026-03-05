@@ -1,9 +1,8 @@
-<<<<<<< HEAD
 # Verkhovyna Helper Bot
 
 Триразові нагадування + кнопки "зроблено/нагадай/не встигла" + критичні задачі (павліни/двері/вода/ліки) з повтором.
 
-## Запуск
+## Запуск (Python Telegram Bot)
 1) python -m venv .venv && source .venv/bin/activate
 2) pip install -r requirements.txt
 3) cp .env.example .env і заповни TOKEN та CHAT_ID
@@ -18,7 +17,9 @@
 /tasks — показати таски
 /addtask <slot> <text> — додати таск
 /deltask <slot> <index> — видалити таск
-=======
+
+---
+
 <a href="https://chat.vercel.ai/">
   <img alt="Chatbot" src="app/(chat)/opengraph-image.png">
   <h1 align="center">Chatbot</h1>
@@ -90,4 +91,3 @@ pnpm dev
 ```
 
 Your app template should now be running on [localhost:3000](http://localhost:3000).
->>>>>>> 0a2b668cda130b309b2e2057e7f0c79145e067fc
