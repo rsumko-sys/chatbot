@@ -1,7 +1,9 @@
 import asyncio
 import logging
+import sys
 from datetime import datetime, timedelta, date
 from functools import partial
+from typing import Optional
 from zoneinfo import ZoneInfo
 
 from aiogram import Bot, Dispatcher, types
@@ -23,9 +25,9 @@ TZ = ZoneInfo(CFG.tz_name)
 
 db = Storage(CFG.db_path)
 
-bot = Bot(token=CFG.bot_token)
+# Initialized in main() after config validation
+bot: Optional[Bot] = None
 dp = Dispatcher()
-
 scheduler = make_scheduler(CFG.tz_name)
 
 
@@ -39,6 +41,7 @@ def _done_kb(slot: str) -> types.InlineKeyboardMarkup:
 
 
 async def send_slot(slot: str) -> None:
+    assert bot is not None
     if db.is_sent(slot):
         return
     recent = db.get_recent_phrases()
@@ -62,6 +65,7 @@ async def send_slot(slot: str) -> None:
 
 
 async def chase_slot(slot: str) -> None:
+    assert bot is not None
     if db.is_done(slot):
         return
     critical = [t for t in TASKS.get(slot, []) if any(kw in t for kw in CRITICAL_KEYWORDS)]
@@ -122,6 +126,7 @@ async def cmd_snooze(message: types.Message) -> None:
 
 
 async def send_slot_forced(slot: str) -> None:
+    assert bot is not None
     recent = db.get_recent_phrases()
     tasks_lines = TASKS.get(slot, [])
     msg, used = build_message(slot, tasks_lines, quiet=True, recent=recent)
@@ -149,6 +154,22 @@ async def cmd_status(message: types.Message) -> None:
 
 
 async def main():
+    global bot
+
+    missing = [name for name, val in [
+        ("TELEGRAM_BOT_TOKEN", CFG.bot_token),
+        ("TARGET_CHAT_ID", CFG.target_chat_id),
+    ] if not val]
+    if missing:
+        logging.error(
+            "Required environment variable(s) not set: %s. "
+            "Copy .env.example to .env and fill in your credentials.",
+            ", ".join(missing),
+        )
+        sys.exit(1)
+
+    bot = Bot(token=CFG.bot_token)
+
     schedule_daily(scheduler, CFG.tz_name, "morning", CFG.morning_at, partial(send_slot, "morning"))
     schedule_daily(scheduler, CFG.tz_name, "day",     CFG.day_at,     partial(send_slot, "day"))
     schedule_daily(scheduler, CFG.tz_name, "evening", CFG.evening_at, partial(send_slot, "evening"))
