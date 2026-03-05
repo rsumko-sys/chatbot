@@ -3,7 +3,7 @@ import requests
 
 def get_weather(city: str = "Verkhovyna", api_key: str = None) -> str:
     if api_key is None:
-        api_key = os.getenv("OPENWEATHER_API_KEY", "")
+        api_key = os.getenv("e2bc03aa53218a4b602049ceb2ee54ca", "")
     if not api_key:
         return "[Погода: API ключ не налаштовано]"
     url = f"https://api.openweathermap.org/data/2.5/weather?q={city}&appid={api_key}&units=metric&lang=ua"
