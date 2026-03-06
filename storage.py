@@ -4,8 +4,10 @@ from typing import Optional, List, Tuple, Dict
 
 SLOTS = ("morning", "day", "evening")
 
+
 def _utc_now_iso() -> str:
     return datetime.utcnow().isoformat()
+
 
 class Storage:
     def __init__(self, db_path: str):
