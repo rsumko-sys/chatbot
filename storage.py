@@ -1,6 +1,4 @@
-import sqlite3
-from datetime import datetime, date
-from typing import Optional, List, Tuple, Dict
+from datetime import datetime
 
 SLOTS = ("morning", "day", "evening")
 
