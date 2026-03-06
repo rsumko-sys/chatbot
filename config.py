@@ -1,8 +1,10 @@
 import os
 from dataclasses import dataclass
+
 from dotenv import load_dotenv
 
 load_dotenv()
+
 
 @dataclass
 class Config:
@@ -15,6 +17,7 @@ class Config:
     snooze_minutes_default: int
     critical_chase_minutes: int
     db_path: str
+
 
 def load_config() -> Config:
     return Config(
